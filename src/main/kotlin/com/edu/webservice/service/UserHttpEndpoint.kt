@@ -5,7 +5,10 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
+import javax.transaction.Transactional
 
 @RestController
 @RequestMapping("/users")
@@ -39,5 +42,20 @@ class UserHttpEndpoint {
     fun save(@RequestBody user: User): User {
         log.info("invoke save($user)")
         return repo.save(user)
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    fun update(@RequestBody user: User): User {
+        log.info("invoke update($user)")
+        return repo.save(user)
+    }
+
+
+    @DeleteMapping("{name}")
+    @ResponseStatus(HttpStatus.OK)
+    fun delete(@PathVariable name: String = ""): Unit {
+        log.info("delete($name)")
+        repo.delete(User(name, -1, LocalDateTime.now()))
     }
 }
